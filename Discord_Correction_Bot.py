@@ -4,9 +4,10 @@ def main():
     lineB=""
     print("Taking stdin")
     while(True):
-        lineA = raw_input("Input line: ")
-        lineB = raw_input("Correction you want to make: ")
-        c = Corrector()
-
+        lineA = input("Input line: ")
+        lineB = input("Correction you want to make: ")
+        c = corrector.Corrector(lineA,lineB)
+        print("Different letters: ")
+        print(c.letterDiff(lineA,lineB))
 if __name__ == "__main__":
     main()

@@ -1,10 +1,11 @@
+import re
 class Corrector:
     """Contains the functionailty for the correction bot"""
-    _line = ""
+    _line=""
     _correction = ""
     _lineDict={}
 
-    def __init__(self):
+    def __init__():
         print("Building corrector\nNo Args Given")
     
     def __init__(self,inputLine):
@@ -16,10 +17,10 @@ class Corrector:
         print("Building corrector\nLine Arg Given")
         self._line=inputLine
         self._correction=correctionLine
-        self.generateNewDictionary()
+        #self.generateNewDictionary()
 
     def generateNewDictionary(self):
-        for word in self.inputLine:
+        for word in self._line:
             self._lineDict[word] = 0.0
 
     def newCorrection(self,new):
@@ -51,7 +52,17 @@ class Corrector:
         the shortest word is 26 characters
         score = abs( 26 - abs(corr - word))/26
     '''
-    def findWord():
-        pass
-
-
+    def findWord(self):
+        curWord=""
+        curMax=0.0
+        for word in line:
+            wordScore = abs(26-abs(_correction-len(word)))/26 
+            
+    ''' 
+    quickly get the number of letters that are unique to wordA that are in wordB
+    '''
+    def letterDiff(self, wordA,wordB):
+        for letter in wordA:
+            wordB = wordB.replace(letter,'',1)
+        return len(wordB)
+    
