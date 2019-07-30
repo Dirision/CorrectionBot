@@ -9,5 +9,6 @@ def main():
         c = corrector.Corrector(lineA,lineB)
         print("Different letters: ")
         print(c.letterDiff(lineA,lineB))
+        c.findWord()
 if __name__ == "__main__":
     main()

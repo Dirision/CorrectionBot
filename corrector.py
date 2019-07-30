@@ -55,14 +55,14 @@ class Corrector:
     def findWord(self):
         curWord=""
         curMax=0.0
-        for word in line:
-            wordScore = abs(26-abs(_correction-len(word)))/26 
-            
+        for word in self._line.split():
+            wordScore = abs(26-abs(len(self._correction)-len(word)))/26 * abs(len(word)-self.letterDiff(self._correction,word))/len(self._correction)
+            print("Score for "+word+": "+str(wordScore))
     ''' 
     quickly get the number of letters that are unique to wordA that are in wordB
     '''
-    def letterDiff(self, wordA,wordB):
-        for letter in wordA:
-            wordB = wordB.replace(letter,'',1)
-        return len(wordB)
+    def letterDiff(self, correction,oldLine):
+        for letter in correction:
+            oldLine = oldLine.replace(letter,'',1)
+        return len(oldLine)
     
