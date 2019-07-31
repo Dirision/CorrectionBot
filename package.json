@@ -1,8 +1,11 @@
 {
-  "name":"Correcto",
+  "name": "Correcto",
   "version": "0.1.1",
   "description": "Corrects your mistakes",
   "main": "bot.js",
   "author": "Redvilder#0342",
-  "dependencies": {}
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "winston": "^3.2.1"
+  }
 }
