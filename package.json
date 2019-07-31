@@ -1,0 +1,8 @@
+{
+  "name":"Correcto",
+  "version": "0.1.1",
+  "description": "Corrects your mistakes",
+  "main": "bot.js",
+  "author": "Redvilder#0342",
+  "dependencies": {}
+}
