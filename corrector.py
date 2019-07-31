@@ -1,4 +1,48 @@
 import re
+
+def correctionBot(line,correction):
+    word=findWord(line,correction)
+    return line.replace(word,correction)
+'''
+Find the word within the sentance that relates most to the 'corrector' provided
+The value associated with each key is how close the correction is to the word 
+as a percentage 
+ex:
+lineA: this is a sentanec 
+lineB: sentance*
+dict: 
+    this-2.4
+    is-50
+    a-0
+    sentance-93.22
+        
+calculation: 
+    27 is the length of the longest word in the english dictionary 
+    Therefore, the maximum distance between the longest word and 
+    the shortest word is 26 characters
+    score = abs( 26 - abs(corr - word))/26
+'''
+def findWord(line, correction):
+    curWord = ""
+    curMax = 0.0
+    for word in line.split():
+        wordScore = abs(26 - abs(len(correction) - len(word))) / 26 * abs(len(word) - letterDiff(correction,word)) / len(correction)
+        print("Score for " + word + ": " + str(wordScore))
+        if (wordScore > curMax): 
+            print("New max word")
+            curMax = wordScore
+            curWord = word
+    return curWord
+        
+''' 
+quickly get the number of letters that are unique to wordA that are in wordB
+'''
+def letterDiff(correction,oldLine):
+    for letter in correction:
+        oldLine = oldLine.replace(letter,'',1)
+    return len(oldLine)
+        
+
 class Corrector:
     """Contains the functionailty for the correction bot"""
     _line=""
@@ -30,8 +74,8 @@ class Corrector:
     Returns the sentance with the correction
     '''
     def getCorrection(self):
-        word=findWord()
-        
+        word=self.findWord()
+        return self._line.replace(word,self._correction)
         
     '''
     Find the word within the sentance that relates most to the 'corrector' provided
@@ -58,6 +102,12 @@ class Corrector:
         for word in self._line.split():
             wordScore = abs(26-abs(len(self._correction)-len(word)))/26 * abs(len(word)-self.letterDiff(self._correction,word))/len(self._correction)
             print("Score for "+word+": "+str(wordScore))
+            if (wordScore > curMax ): 
+                print("New max word")
+                curMax = wordScore
+                curWord = word
+        return curWord
+        
     ''' 
     quickly get the number of letters that are unique to wordA that are in wordB
     '''

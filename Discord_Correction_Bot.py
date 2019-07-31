@@ -10,5 +10,8 @@ def main():
         print("Different letters: ")
         print(c.letterDiff(lineA,lineB))
         c.findWord()
+        newLine=c.getCorrection()
+        fix=corrector.correctionBot(lineA,lineB)
+        print("Corrected line is:\n"+fix)
 if __name__ == "__main__":
     main()
