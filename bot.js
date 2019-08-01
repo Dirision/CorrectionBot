@@ -2,6 +2,9 @@
 var logger = require('winston');
 var auth = require('./auth.json');
 
+
+
+
 // configure logger
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console, { colorize: true });
@@ -34,7 +37,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case "*":
                 bot.sendMessage({
                     to: channelID,
-                    message: 'Hi, Im online!'
+                    message: 'Hi, Im online!\nTo use me, add an * to the end of the word you want to correct from a previous message'
+                    
                 });
                 break;
         }
