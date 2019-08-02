@@ -10,8 +10,31 @@ logger.level = 'debug';
 
 // returns the second last message from userID from a list of messages
 function getSecondLastMessage(userID, messages) {
+    logger.info("Received the last 20 Messages-------------------------------------------")
+    var flag = false;
+    var msgID = "";
+    var msg = "";
+    for (var i in messages) {
+        logger.info("Currently looking at msg:  " + messages[i]['content'] + "::::" + messages[i]['id']);
+        id = messages[i]['author']['id'];
+        if (id == userID) {
+            if (flag == false)
+                flag = true;
+            else if (flag) {
+                msgID = messages[i]['id'];
+                msg = messages[i]['content'];
+                break;
+            }
+        }
 
+        // if(messages[i]['user']['id'])
+    }    
+    if (flag == false || (flag == true && msgID == "")) {
+        throw "No previous messages found";
+    }
 
+    return [msg,msgID];
+    
 }
 // init bot
 var bot = new Discord.Client({
@@ -47,21 +70,33 @@ bot.on('message', function (user, userID, chanID, message, evt) {
             default:
                 bot.sendMessage({
                     to: chanID,
-                    message: 'Received message: ' + args + " from: " + userID + "\nLooking for previous message"
+                    message: 'Received message: ' + args + " from: " + userID + " - Looking for previous message"
 
                 });
                 // pull message array 
                 messages = bot.getMessages({
                     channelID: chanID,
                     limit: 20
+                    // Handle getting a list of messages in the response obgect
                 }, function (error, response) {
-                    for (var i in response) {
-
-                        logger.info(response[i]['content']);
-                    }
+                    var lastMsg = [];
+                    try {
+                        lastMsg = getSecondLastMessage(userID, response);
+                    } catch (err) {
+                        bot.sendMessage({
+                            to: chanID,
+                            message: 'ERROR: ' + err 
+                        });
+                    } 
+                    logger.info("LAST MESSAGE:    " + lastMsg);
+                    bot.sendMessage({
+                        to: chanID,
+                        message: 'Second last message: ' + lastMsg[0] + "- msgID: " + lastMsg[1]
+                    }); 
+                    
                 });
-                logger.info("Last 20 messages: " + messages);
-                // getSecondLastMessage(userID);
+                // logger.info("Last 20 messages: " + messages);
+                
                 break;
         }
     }
