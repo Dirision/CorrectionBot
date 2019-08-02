@@ -11,7 +11,11 @@ logger.level = 'debug';
 // im an idiot
 function correctionBot(line, correction) {
     var word = findWord(line, correction);
-    return line.replace(word, correction);
+    console.log("word to fix: " + word);
+    var final = line.replace(word, correction);
+
+    console.log("Final line: " + final);
+    return final
     
 }
 
@@ -19,10 +23,11 @@ function findWord(line, correction) {
     var curWord = "";
     var curMax = 0.0;
     var wordList = line.split(" ");
+    console.log("Wordlist " + wordList);
     for (var i = 0; i < wordList.length; i += 1) {
         var A = (Math.abs(26.0 - Math.abs(correction.length - wordList[i].length)) / 26.0);
         var B = (Math.abs(wordList[i].length - letterDiff(correction, wordList[i])) / correction.length);
-        console.log("A: " + A + " B: " + B);
+        // console.log("A: " + A + " B: " + B);
         var wordScore = A * B;
                 
         console.log("Score for " + wordList[i] + ": " + wordScore);
@@ -39,7 +44,7 @@ function letterDiff(correction, oldLine) {
         oldLine = oldLine.replace(correction.charAt(i), '');
     }
     oldLen = oldLine.length;
-    console.log("letter diff: " + oldLen);
+    // console.log("letter diff: " + oldLen);
     return oldLen;
 }
 
@@ -112,11 +117,13 @@ bot.on('message', function (user, userID, chanID, message, evt) {
                 });
                 break;
             default:
+                /*
                 bot.sendMessage({
                     to: chanID,
                     message: 'Received message: ' + args + " from: " + userID + " - Looking for previous message"
 
                 });
+                */
                 // pull message array 
                 messages = bot.getMessages({
                     channelID: chanID,
@@ -133,11 +140,23 @@ bot.on('message', function (user, userID, chanID, message, evt) {
                         });
                     } 
                     logger.info("LAST MESSAGE:    " + lastMsg);
-                    bot.sendMessage({
+                    /*
+                        bot.sendMessage({
                         to: chanID,
                         message: 'Second last message: ' + lastMsg[0] + "- msgID: " + lastMsg[1]
-                    }); 
-                    correctionBot(args, lastMsg[0]);
+                    });
+                    */
+                    var fixedMsg = correctionBot(lastMsg[0], args);
+                    // TODO: Add some fun prefixs for the bot to say when he corrects you
+                       //   ex: "What X meant to say was: "
+                       //       "X stumbled on his words and meant to say: "
+                    bot.sendMessage({
+                        to: chanID,
+                        message: user+": "+ fixedMsg
+                    });
+                    
+                    
+                    
                 });
                 // logger.info("Last 20 messages: " + messages);
               
