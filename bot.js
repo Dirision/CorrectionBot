@@ -2,11 +2,48 @@
 var logger = require('winston');
 var auth = require('./auth.json');
 
-
 // configure logger
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console, { colorize: true });
 logger.level = 'debug';
+
+
+// im an idiot
+function correctionBot(line, correction) {
+    var word = findWord(line, correction);
+    return line.replace(word, correction);
+    
+}
+
+function findWord(line, correction) {
+    var curWord = "";
+    var curMax = 0.0;
+    var wordList = line.split(" ");
+    for (var i = 0; i < wordList.length; i += 1) {
+        var A = (Math.abs(26.0 - Math.abs(correction.length - wordList[i].length)) / 26.0);
+        var B = (Math.abs(wordList[i].length - letterDiff(correction, wordList[i])) / correction.length);
+        console.log("A: " + A + " B: " + B);
+        var wordScore = A * B;
+                
+        console.log("Score for " + wordList[i] + ": " + wordScore);
+        if (wordScore > curMax) {
+            curMax = wordScore;
+            curWord = wordList[i];
+        }
+    }
+    return curWord;
+}
+
+function letterDiff(correction, oldLine) {
+    for (var i = 0; i < correction.length; i += 1) {
+        oldLine = oldLine.replace(correction.charAt(i), '');
+    }
+    oldLen = oldLine.length;
+    console.log("letter diff: " + oldLen);
+    return oldLen;
+}
+
+
 
 // returns the second last message from userID from a list of messages
 function getSecondLastMessage(userID, messages) {
@@ -50,6 +87,12 @@ bot.on('ready', function (evt) {
 
 bot.on('message', function (user, userID, chanID, message, evt) {
     // parse and run depending on input
+    if (message == "good bot") {
+            bot.sendMessage({
+                to: chanID,
+                message: 'Thanks! You\'re a good human!'
+            }); 
+        }
     if (message.slice(-1) == '*') {
         var args = message.substring(0, message.length - 1);
         var cmd = args[0];
@@ -59,6 +102,7 @@ bot.on('message', function (user, userID, chanID, message, evt) {
         // when we get to move complex sentance corrections, we can split 
         // the args and call the py code more 
         // args = args.splice(1);
+        
         switch (cmd) {
             case "*":
                 bot.sendMessage({
@@ -93,10 +137,10 @@ bot.on('message', function (user, userID, chanID, message, evt) {
                         to: chanID,
                         message: 'Second last message: ' + lastMsg[0] + "- msgID: " + lastMsg[1]
                     }); 
-                    
+                    correctionBot(args, lastMsg[0]);
                 });
                 // logger.info("Last 20 messages: " + messages);
-                
+              
                 break;
         }
     }
