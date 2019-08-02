@@ -1,11 +1,10 @@
 # CorrectionBot
 Source for a discord bot that corrects mistakes for users when they reply to a line with *
 
-To use, add an * to the end of the word you want to correct from a previous message
-Use '**' for quick help
 Or atleast thats what I intended 
 
-
+To use, add an * to the end of the word you want to correct from a previous message
+Use '\**' for quick help
 
 ## Remarks:
 - This project was intended to have some fun with code, nothing too serious. 
